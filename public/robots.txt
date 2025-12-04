@@ -1,0 +1,38 @@
+# This line tells all web crawlers (Googlebot, Bingbot, etc.) that the following rules apply to them.
+User-Agent: *
+
+# The Disallow directive tells crawlers which parts of the site they should NOT crawl or index.
+# It's crucial to list pages here that are sensitive or not meant for public search results (e.g., admin panels, login screens).
+
+Disallow: /admin/
+Disallow: /login
+Disallow: /signup
+# You can add other private or sensitive paths here.
+
+# The Allow directive is technically optional for the whole site (as everything is allowed by default), 
+# but it provides clarity for the homepage and public sections.
+Allow: /
+
+# The Sitemap directive is the most important part for SEO, as it tells search engines 
+# exactly where to find your sitemap file.
+# Replace 'https://yourdomain.com' with your actual website address.
+
+Sitemap: https://yourdomain.com/sitemap.xml
+german-platform/
+├── app/
+│   ├── login/
+│   │   └── page.tsx           <-- Login Form
+│   ├── signup/
+│   │   └── page.tsx           <-- Choose Account Type
+│   ├── register/
+│   │   ├── student/
+│   │   │   └── page.tsx       <-- Student Registration Form
+│   │   └── teacher/
+│   │       └── page.tsx       <-- Teacher Registration Form
+│   ├── api/
+│   │   └── tts/
+│   │       └── route.js       <-- Gemini TTS Backend API (for pronunciation)
+│   └── page.tsx               <-- Home Page (Landing Page)
+└── components/
+    └── ui/
+        └── ... (shadcn components)
