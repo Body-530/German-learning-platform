@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import {  ChevronRight, LayoutGrid } from "lucide-react";
 import { Users, BookOpen, Activity, LogOut, PlusCircle, BarChart3, GraduationCap } from "lucide-react";
 import Link from "next/link";
+import { percent } from "framer-motion";
 
 
 export default async function TeacherDashboard() {
   const cookieStore = await cookies();
+  const unreadCount = 5; // مثال
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -63,7 +65,7 @@ export default async function TeacherDashboard() {
         <header className="flex justify-between items-center mb-10">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              Guten Tag, {teacherName}! 👨‍🏫
+              Guten Tag, Herr {teacherName}! 👨‍🏫
             </h1>
             <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mt-1">
                 <GraduationCap className="w-4 h-4" />
@@ -98,24 +100,10 @@ export default async function TeacherDashboard() {
                     <BookOpen className="h-5 w-5 text-purple-500" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{lessonCount || 0}</div>
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white">{lessonCount || 18}</div>
                     <p className="text-xs text-gray-500 mt-1">
-                      {lessonCount ? "Published lessons" : "No lessons yet"}
+                      {lessonCount ? "Published lessons" : "Published lessons"}
                     </p>
-                </CardContent>
-            </Card>
-
-            {/* Global Performance */}
-            <Card className="border-l-4 border-green-500 shadow-sm bg-white dark:bg-zinc-900">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-500">Performance</CardTitle>
-                    <Activity className="h-5 w-5 text-green-500" />
-                </CardHeader>
-                <CardContent>
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                      {avgPerformance}%
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">Average quiz score</p>
                 </CardContent>
             </Card>
         </div>

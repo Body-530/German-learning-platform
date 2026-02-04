@@ -42,15 +42,10 @@ const AccountOption = ({ title, description, icon: Icon, type }: AccountOptionPr
 
 export default function SignupPage() {
  return (
-    // الخلفية العامة للصفحة (غمقتها سنة بسيطة عشان المربع يبان)
+
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 font-sans p-6">
 
-      {/* المربع نفسه */}
-      {/* التغييرات هنا:
-          1. max-w-2xl: خليته أعرض
-          2. p-12: زودت المساحة الداخلية
-          3. bg-white/80 backdrop-blur-md: خليته شفاف بسيط (مودرن)
-      */}
+
       <div className="w-full max-w-2xl p-12 bg-white/90 dark:bg-zinc-900/90 rounded-3xl shadow-2xl 
                       border border-gray-200 dark:border-zinc-700 text-center backdrop-blur-sm">
         
@@ -62,7 +57,7 @@ export default function SignupPage() {
           Welcome to Deutsch Lernen! Please select your account type to continue.
         </p>
 
-        {/* Options Grid - خليتها صفين كبار ومريحين */}
+    
         <div className="grid gap-6 md:grid-cols-1">
           <AccountOption 
             title="Student Learner" 

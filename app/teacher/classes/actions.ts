@@ -4,14 +4,12 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-export async function createClass(prevState: any, formData: FormData) {
-  const name = formData.get("name") as string;
-  const level = formData.get("level") as string;
 
+async function getSupabaseAdmin() {
   const cookieStore = await cookies();
-  const supabase = createServerClient(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!, 
     {
       cookies: {
         getAll() { return cookieStore.getAll() },
@@ -25,26 +23,20 @@ export async function createClass(prevState: any, formData: FormData) {
       },
     }
   );
+}
 
-  const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    return { error: "Authentication failed. Please login again.", type: "AUTH_ERROR" };
-  }
+export async function deleteStudent(studentId: string) {
+  const supabase = await getSupabaseAdmin();
+  
 
-  const { error } = await supabase
-    .from("classes")
-    .insert({
-      name,
-      level,
-      teacher_id: user.id, 
-    });
+  const { error } = await supabase.auth.admin.deleteUser(studentId);
 
   if (error) {
-    console.error("Database Error:", error.message);
-    return { error: "Failed to create class. Please try again.", type: "DB_ERROR" };
+
+    await supabase.from("profiles").delete().eq("id", studentId);
   }
 
-  revalidatePath("/teacher/classes");
-  return { message: "Class created successfully!", success: true };
+  revalidatePath("/teacher/manage-students");
+  return { success: true };
 }

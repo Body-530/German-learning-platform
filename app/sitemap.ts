@@ -1,50 +1,94 @@
+
+
 import { MetadataRoute } from 'next'
 
-// يجب استبدال هذا برابط نطاقك الفعلي عند النشر (مثلاً: https://german-platform.com)
 const BASE_URL = 'http://localhost:3000' 
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // 1. المسارات الثابتة (Static Routes)
-  const staticRoutes: MetadataRoute.Sitemap = [
+  
+  // 1. المسارات العامة (Public Routes)
+  const publicRoutes: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
       lastModified: new Date(),
-      changeFrequency: 'daily', // كم مرة تتوقع تحديث هذه الصفحة
-      priority: 1.0,           // أهمية الصفحة (1.0 هو الأهم)
+      changeFrequency: 'daily',
+      priority: 1.0,
     },
     {
       url: `${BASE_URL}/login`,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.5, // صفحات الدخول/التسجيل أقل أهمية لمحركات البحث
+      changeFrequency: 'monthly',
+      priority: 0.8,
     },
     {
       url: `${BASE_URL}/signup`,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.5,
+      changeFrequency: 'monthly',
+      priority: 0.8,
     },
-    // يمكن إضافة مسارات أخرى هنا (مثل /about، /contact)
   ]
 
-  // 2. المسارات الديناميكية (Dynamic Routes) - **إذا كانت موجودة**
-  // إذا كان لديك صفحات مثل "صفحة لكل طالب" أو "صفحة لكل معلم"
-  
-  // مثال: إذا كان لديك صفحات مسجلة (registered) للطلاب والمعلمين يجب إظهارها:
-  /*
-  const students = await fetch('YOUR_API_ENDPOINT_FOR_STUDENTS').then(res => res.json())
-  
-  const studentRoutes: MetadataRoute.Sitemap = students.map((student: any) => ({
-    url: `${BASE_URL}/register/student/${student.id}`,
-    lastModified: new Date(student.updatedAt),
-    changeFrequency: 'monthly', 
-    priority: 0.8,
-  }))
-  */
+  // 2. مسارات الطالب (Student Section)
+  const studentRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/student/dashboard`,
+      lastModified: new Date(),
+      changeFrequency: 'always', // تتحدث باستمرار مع الدرجات
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/student/vocab`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/student/quiz`,
+      lastModified: new Date(),
+      changeFrequency: 'never', // صفحة الامتحان نفسها لا تتغير برمجياً
+      priority: 0.6,
+    },
+    {
+      url: `${BASE_URL}/student/exams`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+  ]
 
-  // في حالتك الحالية، نفترض أنك تعتمد على المسارات الثابتة فقط
-  const dynamicRoutes: MetadataRoute.Sitemap = [] 
+  // 3. مسارات المعلم (Teacher Section)
+  const teacherRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/teacher/Analytics`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/teacher/classes`,
+      lastModified: new Date(),
+      changeFrequency: 'never',
+      priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/teacher/dashboard`,
+      lastModified: new Date(),
+      changeFrequency: 'never', 
+      priority: 0.6,
+    },
+    {
+      url:`${BASE_URL}/teacher/student`,
+      lastModified: new Date(),
+      changeFrequency: 'never',
+      priority:0.5,
+    },
+    // أضف أي مسارات أخرى للمعلم هنا مثل /teacher/manage-words
+  ]
 
-  // دمج جميع المسارات
-  return [...staticRoutes, ...dynamicRoutes]
+  // دمج كل المسارات في قائمة واحدة
+  return [
+    ...publicRoutes,
+    ...studentRoutes,
+    ...teacherRoutes,
+  ]
 }
