@@ -1,4 +1,3 @@
-
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -72,7 +71,6 @@ export default async function TeacherAnalyticsPage() {
     
     const averageScore = examsTaken > 0 ? Math.round(totalPercentage / examsTaken) : 0;
 
-
     const rankPower = averageScore + (examsTaken * 5); 
 
     return {
@@ -84,8 +82,8 @@ export default async function TeacherAnalyticsPage() {
       examTypes
     };
   })
-  .sort((a, b) => b.rankPower - a.rankPower) // الترتيب بناءً على القوة (درجة + نشاط)
-  .slice(0, 10);
+  .sort((a, b) => b.rankPower - a.rankPower); 
+  // ⚠️ تم حذف .slice(0, 10) لعرض الجميع
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 font-sans">
@@ -108,8 +106,8 @@ export default async function TeacherAnalyticsPage() {
         <Card className="shadow-2xl border-none rounded-[32px] overflow-hidden bg-white">
           <CardHeader className="text-center border-b bg-slate-50/50 py-8">
             <Trophy className="h-12 w-12 text-yellow-500 mx-auto mb-3" />
-            <CardTitle className="text-3xl font-black text-[#1B4332] tracking-tight">TOP 10 SCHÜLER</CardTitle>
-            <CardDescription className="font-bold text-slate-400">Basierend auf Durchschnittsnote und Aktivität</CardDescription>
+            <CardTitle className="text-3xl font-black text-[#1B4332] tracking-tight">RANGLISTE ALLER SCHÜLER</CardTitle>
+            <CardDescription className="font-bold text-slate-400">Vollständige Liste basierend auf Leistung</CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <div className="divide-y divide-slate-100">
@@ -183,9 +181,6 @@ export default async function TeacherAnalyticsPage() {
                     <h3 className="text-3xl font-black tracking-tight">
                         {leaderboard.sort((a,b) => b.examsTaken - a.examsTaken)[0]?.name || "N/A"}
                     </h3>
-                    {/* <p className="text-emerald-100/70 text-sm mt-3 font-medium flex items-center gap-2">
-                        <activity className="h-4 w-4" /> Höchste Prüfungsbeteiligung
-                    </p> */}
                 </div>
                 <GraduationCap className="absolute -bottom-6 -right-6 h-32 w-32 text-emerald-900/40" />
             </Card>
@@ -204,7 +199,7 @@ export default async function TeacherAnalyticsPage() {
                         <Star className="h-8 w-8 text-yellow-600 fill-yellow-600" />
                     </div>
                 </div>
-                <p className="text-slate-400 text-xs mt-4 font-bold">Basierend auf den Top 10 Schülern.</p>
+                <p className="text-slate-400 text-xs mt-4 font-bold">Basierend auf allen Schülern.</p>
             </Card>
         </div>
 
