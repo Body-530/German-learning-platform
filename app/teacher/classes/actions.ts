@@ -24,8 +24,6 @@ async function getSupabaseAdmin() {
     }
   );
 }
-
-
 export async function deleteStudent(studentId: string) {
   const supabase = await getSupabaseAdmin();
   
@@ -37,6 +35,6 @@ export async function deleteStudent(studentId: string) {
     await supabase.from("profiles").delete().eq("id", studentId);
   }
 
-  revalidatePath("/teacher/manage-students");
+  revalidatePath("/teacher/classes");
   return { success: true };
 }
