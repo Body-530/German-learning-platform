@@ -185,7 +185,11 @@ export default function StudentDashboard() {
             </Card>
           </Link>
 
+<<<<<<< HEAD
     <Link href="/student/leaderboard" className="group">
+=======
+         <Link href="/student/leaderboard" className="group">
+>>>>>>> 49f5bfda5d6e0e9aa8a029e3107c8b957924b8ba
             <Card className="relative h-full min-h-[220px] overflow-hidden border-none shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 bg-white dark:bg-zinc-900 text-left">
               <div className="absolute top-0 right-0 p-8 opacity-5 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12 text-orange-600"><BarChart3 size={120} /></div>
               <CardHeader className="pt-8 px-8">
