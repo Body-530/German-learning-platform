@@ -185,7 +185,7 @@ export default function StudentDashboard() {
             </Card>
           </Link>
 
-          <Link href="/teacher/Analytics" className="group">
+         <Link href="/student/leaderboard" className="group">
             <Card className="relative h-full min-h-[220px] overflow-hidden border-none shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 bg-white dark:bg-zinc-900 text-left">
               <div className="absolute top-0 right-0 p-8 opacity-5 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12 text-orange-600"><BarChart3 size={120} /></div>
               <CardHeader className="pt-8 px-8">
@@ -196,7 +196,7 @@ export default function StudentDashboard() {
               </CardHeader>
               <CardContent className="px-8 pb-8">
                 <p className="text-gray-500 dark:text-gray-400 leading-relaxed mb-6">Discover top achievers and analyze class performance.</p>
-                <div className="flex items-center text-orange-600 font-bold text-sm">Open Analytics <ChevronRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-2" /></div>
+                <div className="flex items-center text-orange-600 font-bold text-sm">Open Leaderboard <ChevronRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-2" /></div>
               </CardContent>
             </Card>
           </Link>
