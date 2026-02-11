@@ -89,7 +89,26 @@ export default function StudentVocabPage() {
         }
     };
 
-   
+       // ← BATCH INSERT ADDITION
+    // دالة رفع CSV كبير بأكثر من 1000 كلمة
+    const handleUploadCSV = async (csvData: string) => {
+        const parsedWords: VocabularyItem[] = parseCSV(csvData); // CSV -> كائنات
+        const batchSize = 500; // عدد الكلمات لكل دفعة
+
+        for (let i = 0; i < parsedWords.length; i += batchSize) {
+            const batch = parsedWords.slice(i, i + batchSize);
+            const { data, error } = await supabase.from('words').insert(batch);
+            if (error) {
+                console.error(`Error in batch ${i / batchSize + 1}:`, error);
+                break;
+            } else {
+                console.log(`Batch ${i / batchSize + 1} uploaded`);
+            }
+        }
+
+        // تحديث الـ state بعد رفع كل الدفعات
+        setAllVocab(prev => [...prev, ...parsedWords]);
+    };
     const displayedVocab = selectedLesson 
         ? filteredVocab.filter(item => 
             item.german_word.toLowerCase().includes(searchTerm.toLowerCase()) ||
