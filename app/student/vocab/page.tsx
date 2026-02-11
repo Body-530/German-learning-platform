@@ -47,8 +47,7 @@ export default function StudentVocabPage() {
     // 2. حالة جديدة للتحكم في العرض (قائمة الدروس vs كلمات الدرس)
     const [selectedLesson, setSelectedLesson] = useState<string | null>(null); // null means show lesson list
 
-    // مصفوفة الدروس من 1 لـ 11
-    const lessons = Array.from({ length: 11 }, (_, i) => (i + 1).toString());
+  const lessons = Array.from({ length: 18 }, (_, i) => (i + 1).toString());
 
     useEffect(() => {
         const fetchVocab = async () => {
@@ -70,13 +69,8 @@ export default function StudentVocabPage() {
                 setError("Failed to load vocabulary.");
             } else if (data) {
              
-                // Randomly assign a lesson (1-11) to each word for demo purposes
-                const vocabWithRandomLessons = data.map((item: any) => ({
-                    ...item,
-    
-                    lesson: item.lesson || Math.ceil(Math.random() * 11).toString()
-                }));
-                setAllVocab(vocabWithRandomLessons);
+               setAllVocab(data);
+
             }
             setLoading(false);
         };
