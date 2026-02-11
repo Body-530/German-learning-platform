@@ -1,15 +1,12 @@
-
-
 "use client";
 
-import { ChevronLeft, Volume2, Search, ArrowRight, Loader2, AlertCircle, Trash2, BookOpen, Dumbbell, LayoutGrid } from "lucide-react";
+import { ChevronLeft, Volume2, Search, ArrowRight, Loader2, Trash2, BookOpen, Dumbbell, LayoutGrid } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
 
 // 1. تحديث الـ Interface ليشمل الدرس
 interface VocabularyItem {
@@ -38,25 +35,23 @@ const speakText = (text: string) => {
 
 export default function StudentVocabPage() {
     const [allVocab, setAllVocab] = useState<VocabularyItem[]>([]);
-    const [filteredVocab, setFilteredVocab] = useState<VocabularyItem[]>([]); // للعرض الحالي
+    const [filteredVocab, setFilteredVocab] = useState<VocabularyItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-    
-    // 2. حالة جديدة للتحكم في العرض (قائمة الدروس vs كلمات الدرس)
-    const [selectedLesson, setSelectedLesson] = useState<string | null>(null); // null means show lesson list
+    const [selectedLesson, setSelectedLesson] = useState<string | null>(null); 
 
-  const lessons = Array.from({ length: 18 }, (_, i) => (i + 1).toString());
+    const lessons = Array.from({ length: 18 }, (_, i) => (i + 1).toString());
 
+    // جلب البيانات من Supabase
     useEffect(() => {
         const fetchVocab = async () => {
             setLoading(true);
             const { data: { user } } = await supabase.auth.getUser();
             if (user) setCurrentUserId(user.id);
 
-            let query = supabase.from('words').select('*').order('created_at', { ascending: false });
-            
+            let query = supabase.from('words').select('*', { count: 'exact' }).order('created_at', { ascending: false });
             if (user) {
                 query = query.or(`user_id.eq.${user.id},user_id.is.null`);
             } else {
@@ -68,9 +63,12 @@ export default function StudentVocabPage() {
             if (dbError) {
                 setError("Failed to load vocabulary.");
             } else if (data) {
-             
-               setAllVocab(data);
-
+                // تعيين default للدرس لو فارغ
+                const dataWithLesson = data.map(d => ({
+                    ...d,
+                    lesson: d.lesson || '1'
+                }));
+                setAllVocab(dataWithLesson);
             }
             setLoading(false);
         };
@@ -78,24 +76,24 @@ export default function StudentVocabPage() {
         fetchVocab();
     }, []);
 
+    // تحديث filteredVocab عند تغيير allVocab أو selectedLesson
+    useEffect(() => {
+        if (selectedLesson === 'all') {
+            setFilteredVocab(allVocab);
+        } else if (selectedLesson) {
+            setFilteredVocab(allVocab.filter(item => item.lesson === selectedLesson));
+        }
+    }, [selectedLesson, allVocab]);
 
     const handleSelectLesson = (lesson: string) => {
         setSelectedLesson(lesson);
         setSearchTerm(""); 
-        if (lesson === 'all') {
-            setFilteredVocab(allVocab);
-        } else {
-            setFilteredVocab(allVocab.filter(item => item.lesson === lesson));
-        }
     };
 
-   
-    const displayedVocab = selectedLesson 
-        ? filteredVocab.filter(item => 
-            item.german_word.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.arabic_translation.includes(searchTerm)
-          )
-        : [];
+    const displayedVocab = filteredVocab.filter(item => 
+        item.german_word.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.arabic_translation.includes(searchTerm)
+    );
 
     const handleRemoveWord = async (wordId: string) => {
         if (!confirm("Delete this word?")) return;
@@ -104,7 +102,6 @@ export default function StudentVocabPage() {
         else {
             const updated = allVocab.filter(item => item.id !== wordId);
             setAllVocab(updated);
-       
             if (selectedLesson === 'all') setFilteredVocab(updated);
             else setFilteredVocab(updated.filter(item => item.lesson === selectedLesson));
         }
@@ -114,17 +111,14 @@ export default function StudentVocabPage() {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 font-sans">
             <div className="max-w-6xl mx-auto">
                 
-                {/* Header changes based on view */}
                 <header className="flex items-center justify-between mb-8 border-b pb-4 border-gray-200 dark:border-zinc-800">
                     {selectedLesson === null ? (
-                       
                         <Link href="/student/dashboard" passHref>
                             <Button variant="ghost" className="gap-2">
                                 <ChevronLeft className="h-5 w-5" /> Dashboard
                             </Button>
                         </Link>
                     ) : (
-        
                         <Button variant="ghost" onClick={() => setSelectedLesson(null)} className="gap-2">
                             <ChevronLeft className="h-5 w-5" /> All Lessons
                         </Button>
@@ -144,10 +138,8 @@ export default function StudentVocabPage() {
                     <div className="text-center py-20"><Loader2 className="animate-spin h-10 w-10 mx-auto text-blue-600"/></div>
                 ) : (
                     <>
-                        {/* VIEW 1: LESSON SELECTION GRID */}
                         {selectedLesson === null && (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4">
-                                {/* All Lessons Card */}
                                 <Card 
                                     className="cursor-pointer hover:shadow-xl transition-all border-l-4 border-indigo-500 hover:scale-[1.02]"
                                     onClick={() => handleSelectLesson('all')}
@@ -161,7 +153,6 @@ export default function StudentVocabPage() {
                                     </CardHeader>
                                 </Card>
 
-                                {/* Individual Lesson Cards */}
                                 {lessons.map((lesson) => {
                                     const count = allVocab.filter(w => w.lesson === lesson).length;
                                     return (
@@ -183,11 +174,8 @@ export default function StudentVocabPage() {
                             </div>
                         )}
 
-                        {/* VIEW 2: WORDS LIST FOR SELECTED LESSON */}
                         {selectedLesson !== null && (
                             <div className="animate-in fade-in slide-in-from-right-4">
-                                
-                                {/* Tools Section: Search + Practice */}
                                 <div className="flex flex-col md:flex-row gap-4 mb-8 justify-between items-center bg-white dark:bg-zinc-900 p-4 rounded-xl shadow-sm">
                                     <div className="relative w-full md:w-1/2">
                                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -199,7 +187,6 @@ export default function StudentVocabPage() {
                                         />
                                     </div>
                                     
-                                    {/* Practice Button */}
                                     {selectedLesson !== 'all' && (
                                         <Link href={`/student/quiz?lesson=${selectedLesson}`}>
                                             <Button className="bg-green-600 hover:bg-green-700 text-white w-full md:w-auto">
@@ -210,7 +197,6 @@ export default function StudentVocabPage() {
                                     )}
                                 </div>
 
-                                {/* Words Grid */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {displayedVocab.length === 0 ? (
                                         <div className="col-span-3 text-center py-10 text-gray-500">
@@ -228,7 +214,6 @@ export default function StudentVocabPage() {
                                                             <Volume2 className="h-5 w-5" />
                                                         </Button>
                                                     </div>
-                                                    {/* إظهار رقم الدرس في الكارت لو احنا في وضع عرض الكل */}
                                                     {selectedLesson === 'all' && (
                                                         <span className="text-xs bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded">Lektion {item.lesson}</span>
                                                     )}
