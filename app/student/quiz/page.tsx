@@ -7,7 +7,7 @@ import { Loader2, CheckCircle, Clock, RotateCcw, ChevronLeft } from 'lucide-reac
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-export const dynamic = "force-dynamic";
+
 
 interface VocabularyItem {
     id: string;
