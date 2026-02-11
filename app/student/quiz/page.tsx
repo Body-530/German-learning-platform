@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter,useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { Loader2, CheckCircle, Clock, RotateCcw, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,8 @@ const TIME_PER_QUESTION = 5; // ⏳ 5 seconds only
 
 export default function TimedQuizPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const lessonParam = searchParams.get("lesson");
     const [quizWords, setQuizWords] = useState<VocabularyItem[]>([]);
     const [allWords, setAllWords] = useState<VocabularyItem[]>([]);
     const [loading, setLoading] = useState(true);
@@ -62,10 +64,16 @@ export default function TimedQuizPage() {
 
             setUserId(user.id);
 
-            const { data, error } = await supabase
-                .from('words')
-                .select('id, german_word, arabic_translation')
-                .or(`user_id.eq.${user.id},user_id.is.null`);
+             let query = supabase
+            .from('words')
+            .select('id, german_word, arabic_translation')
+            .or(`user_id.eq.${user.id},user_id.is.null`);
+            
+            if (lessonParam) {
+                query = query.eq('lesson', lessonParam);
+            }
+
+            const { data, error } = await query;
 
             if (error) {
                 console.error(error);
