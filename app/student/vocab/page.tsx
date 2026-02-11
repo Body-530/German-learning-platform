@@ -89,6 +89,16 @@ export default function StudentVocabPage() {
         }
     };
 
+  const parseCSV = (csvText: string): VocabularyItem[] => {
+  return csvText
+    .split("\n")
+    .slice(1) // تجاهل العنوان
+    .map(line => {
+      const [german_word, article, arabic_translation, example_sentence, mastery_level, lesson] = line.split(",");
+      return { id: crypto.randomUUID(), user_id: null, german_word, article, arabic_translation, example_sentence, mastery_level: Number(mastery_level), lesson };
+    });
+};
+
        // ← BATCH INSERT ADDITION
     // دالة رفع CSV كبير بأكثر من 1000 كلمة
     const handleUploadCSV = async (csvData: string) => {
