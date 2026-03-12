@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**German Learning Platform 🎓🇩🇪
+**
+An interactive German learning platform designed to help students learn German efficiently. The platform features URT, TOC, and all lessons organized in a clear and structured way, with interactive tests, listening exercises, and a leaderboard to encourage friendly competition. Built for my school community, it’s a virtual classroom where seniors and teachers can manage tasks and exams easily.
 
-## Getting Started
+**Live Demo 🌐** : https://german-platform-vercel.vercel.app/
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**🛠 Technologies Used**
+**
+Frontend: React.js, Next.js, JavaScript
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Backend: Node.js
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Database: Supabase
 
-## Learn More
+Deployment: Vercel
 
-To learn more about Next.js, take a look at the following resources:
+IDE: Visual Studio Code**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**✨ Features**
 
-## Deploy on Vercel
+Complete lessons from Lektion 1 to 18
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Listening exercises (Hören) to learn German pronunciation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Tests for each lesson and overall exams (URT & TOC 2016–2025)
+
+Leaderboard for competitive spirit
+
+Task upload and management for teachers and seniors
+
+
+
+**🛠 How I Built It**
+
+Planned the platform structure and UI/UX for school students.
+
+Created the frontend with React.js + Next.js for fast and interactive pages.
+
+Connected Supabase as the database for lessons, exams, and leaderboard.
+
+Implemented listening exercises with audio support for German words.
+
+Added testing system for each lesson and overall exams.
+
+Deployed the project on Vercel for easy access by students and teachers.
+
+
+**📚 What I Learned
+**
+How to integrate a backend database (Supabase) with Next.js
+
+Building a structured learning platform with multiple lessons and tests
+
+Deployment and live hosting on Vercel
+
+Managing interactive features like leaderboards and listening exercises
+
+
+
+**🚀 How It Could Be Improved**
+
+Add user authentication for students and teachers
+
+Include progress tracking and analytics
+
+Implement mobile-friendly responsive design
+
+Add more interactive exercises like quizzes and flashcards
+
+
